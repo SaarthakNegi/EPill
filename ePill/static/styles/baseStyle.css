@@ -1,0 +1,56 @@
+.navbar {
+    font-family: 'Montserrat', 'Roboto', sans-serif;
+    background-color: rgba(255, 255, 255, 0.733) !important;
+}
+
+.footer-copyright {
+    font-family: 'Montserrat', 'Roboto', sans-serif;
+    color: darkgray;
+}
+
+/* Footer/Copyright */
+
+footer a {
+    color: #039391;
+}
+
+footer {
+    background-color: white !important;
+}
+
+.footer {
+    position: relative;
+    width: 100%;
+    /*bottom: 0*/
+}
+
+/* Individual elements: Interactive signature color.*/
+.blue {
+    color: #3399FF !important;
+}
+
+.red {
+    color: #9A3334 !important;
+}
+
+#tipsheet {
+    color: #039391;
+}
+
+#register {
+    color: #039391;
+}
+
+.nav-style {
+    background-color: whitesmoke !important;
+}
+
+.navbar-fixed-top {
+    min-height: 80px;
+}
+
+.navbar {
+    /*border-radius: 4px;*/
+    min-height: 5em;
+    border: 4px black !important;
+}

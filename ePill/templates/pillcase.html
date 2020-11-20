@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% extends "base.html" %}
+    {% load static %}
+    {% block head_block %}
+        {% block title %}<title> Elder's Pillcase</title>{% endblock %}
+        {#    <link rel="stylesheet" href="{% static '/style.css' %}">#}
+
+        {#        <link rel="script" href="{% static '/cellTips.js' %}">#}
+
+        {#        <link rel="stylesheet" href="{% static '/styles/helpTip.css' %}">#}
+        {#    <link rel="stylesheet" href="{% a %}"#}
+
+    {% endblock %}
+
+
+    {% block body_block %}
+        <div class="container" id="tipsheetname"><span class="blue">{{ user.name }} {{ user.surname }}</span>'s Pillcase
+        </div>
+        <div id="content">
+            <table id="tipstable" class="table table-bordered">
+                <thead>
+                    <tr id="mainstage">
+                        <th></th>
+                        {% for day in days %}
+                            <th colspan="{{ day }}" class="text-center">{{ day }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for time in times %}
+                        <tr id="time{{ time }}">
+                            <th scope="row">{{ time }}</th>
+                            {% for day in days %}
+                                <td>
+                                    <div class="inner">
+{#                                    {{ day }}#}
+                                        {% for pill in pillsPerDay|get_item:day|get_item:time %}
+                                            {{ pill }}
+                                        {% endfor %}
+                                        <div id="{{ day }}-{{ time }}" class="cellPills overlay"
+                                             data-toggle="modal" data-target="#moreView">
+
+                                            <p> click for more</p>
+
+                                        </div>
+
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+        <div class="modal fade" id="moreView" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLongTitle">Here is an overview</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <div class="selected col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <h2>Pills for this day and time</h2>
+                                </div>
+                                <div id="selected" class="row">
+                                    <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="card">
+
+                                            <div class="info">
+                                                <h3>
+                                                    aa
+                                                </h3>
+                                                <p>round</p>
+                                                <p>aa</p>
+                                                <p>tiny</p>
+                                            </div>
+
+                                            <button id="1-2-16" class="deletion btn btn-danger"
+                                                    style="width:100%; padding: 0; margin: 0;">Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="celltips col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                {#                                <div class="row">#}
+
+                                <h2>Available pills</h2>
+                                <div class="row">
+                                    {% for pill in pills %}
+                                        <form method="post" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <div class="card">
+                                                <div class="info">
+                                                    <h3>
+                                                        {{ pill.name }}
+                                                    </h3>
+                                                    <p>{{ pill.shape }}</p>
+                                                    <p>{{ pill.color }}</p>
+                                                    <p>{{ pill.size }}</p>
+
+
+                                                    {% csrf_token %}
+                                                    <label data-error="wrong" data-success="right"
+                                                           for="defaultForm-time">Select
+                                                                                  time</label>
+                                                    <select id="defaultForm-time" name="shape">
+                                                        {% for hour in hours|get_times:'Morning' %}
+                                                            <option value="{{ hour }}">{{ hour }}</option>#}
+                                                        {% endfor %}
+                                                    </select>
+
+                                                    <br>
+
+
+                                                </div>
+                                                <button class="btn btn-default" type='submit' name='button'
+                                                        value="addToTime{{ pill.name }}"
+                                                        style="align-self:center; color:green">
+                                                    + Add {{ pill.name }} to time
+                                                </button>
+
+
+                                                {#                                                <button type="submit" class="btn btn-success" name="pill{{ pill }}"#}
+                                                {#                                                        value="addToTime" style="width:100%; padding: 0; margin: 0; ">#}
+                                                {#                                                    Add {{ pill }}#}
+                                                {#                                                </button>#}
+                                            </div>
+
+                                        </form>
+                                    {% endfor %}
+                                </div>
+
+
+                                {#                                </div>#}
+
+                                <div id="celltips" class="row">
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form method="post"
+              style="border-top: 2px solid darkgray; align-content: center; justify-content: center">
+            <div class="container">
+                <h3>Add a new pill</h3>
+                {% csrf_token %}
+                <div class="container">
+
+                    {#                    <i class="fas prefix grey-text"></i>#}
+                    <label data-error="wrong" data-success="right" for="defaultForm-name">Pill's
+                                                                                          name</label>
+
+                    <input type="text" id="defaultForm-name" class="form-control validate" name="name">
+                    <div class="help-tip">
+                        <p>Give the name of the pill as indicated on the box</p>
+                    </div>
+
+
+                    {#                    <i class="fas prefix grey-text"></i>#}
+                    <label data-error="wrong" data-success="right" for="defaultForm-color">Pill's
+                                                                                           color</label>
+                    <input type="text" id="defaultForm-color" class="form-control validate" name="color">
+
+
+                    <div>
+                        <label data-error="wrong" data-success="right" for="defaultForm-shape">Pill's
+                                                                                               shape</label>
+                        <br>
+                        <select id="defaultForm-shape" name="shape">
+                            <option value="round">Round</option>
+                            <option value="oval">Oval</option>
+                            <option value="capsule">Capsel</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label data-error="wrong" data-success="right" for="defaultForm-shape">Pill's
+                                                                                               size</label>
+                        <br>
+                        <select id="defaultForm-shape" name="size">
+                            <option value="tiny">Very Small</option>
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+
+                    <div>
+
+
+                        <label data-error="wrong" data-success="right" for="defaultForm-days">Days to take the
+                                                                                              following pill</label>
+
+
+                        <select id="defaultForm-days" class="custom-select" name="days" multiple>
+                            {% for day in days %}
+                                <option value="{{ day }}">{{ day }}</option>
+
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div>
+
+
+                        <label data-error="wrong" data-success="right" for="defaultForm-times">Days to take the
+                                                                                               following pill</label>
+
+
+                        <select id="defaultForm-times" class="custom-select" name="times" multiple>
+                            {% for exactTime in exactTimes %}
+                                <option value="{{ exactTime }}">{{ exactTime }}</option>
+
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {#                    <i class="fas fa-lock prefix grey-text"></i>#}
+                </div>
+            </div>
+            <div class="container">
+                <button class="btn btn-default" type='submit' name='button' value="Add"
+                        style="align-self:center; color:green">
+                    + Add new pill
+                </button>
+            </div>
+        </form>
+    {% endblock %}
+
+    {% block js_block %}
+        <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+        {% csrf_token %}
+
+        <script type='text/javascript' src="{% static 'javascript/pillsHandling.js' %}">
+        </script>
+    {% endblock %}
+
+    </body>
+</html>
